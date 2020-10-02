@@ -1,0 +1,20 @@
+msgid "AutoUpdate"
+msgstr "定时更新"
+
+msgid "Week Day"
+msgstr "更新时间"
+
+msgid "Everyday"
+msgstr "每天"
+
+msgid "Day"
+msgstr "天"
+
+msgid "Hour"
+msgstr "小时 [0~23]"
+
+msgid "Minute"
+msgstr "分钟 [0~59]"
+
+msgid "Check Update"
+msgstr "检查更新"
