@@ -18,3 +18,15 @@ msgstr "分钟 [0~59]"
 
 msgid "Check Update"
 msgstr "检查更新"
+
+msgid "Enable AutoUpdate"
+msgstr "启用定时更新"
+
+msgid "Force Update"
+msgstr "强制更新"
+
+msgid "If no new version is detected,do upgrade also"
+msgstr "即使未检测到新版本,也执行更新"
+
+msgid "Openwrt-AutoUpdate is a script that AutoUpgrade Firmware"
+msgstr "Openwrt-AutoUpdate是一个自动升级AutoBuild固件的脚本"

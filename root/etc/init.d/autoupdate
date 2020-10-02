@@ -5,26 +5,28 @@ run_autoupdate()
 {
 	local enable
 	config_get_bool enable $1 enable
+	local forceupdate
+	config_get_bool forceupdate $1 forceupdate
 	if [ $enable = 1 ]; then
 		local minute
 		local hour
 		config_get week $1 week
 		config_get minute $1 minute
 		config_get hour $1 hour
-		if [ $minute == 0 ] ; then
-			minute="00"
-		fi
-		if [ $week == 7 ] ; then
-			week="*"
-		fi
+		[ $minute = 0 ] && minute="00"
+		[ $week = 7 ] && week="*"
 		sed -i '/AutoUpdate/d' /etc/crontabs/root >/dev/null 2>&1
 		/etc/init.d/cron restart
-		echo "$minute $hour * * $week sleep 3 && bash /bin/AutoUpdate.sh" >> /etc/crontabs/root
-		echo "已开启 自动更新 服务."
+		if [ $forceupdate = 1 ];then
+			echo "$minute $hour * * $week bash /bin/AutoUpdate.sh -x" >> /etc/crontabs/root
+		else
+			echo "$minute $hour * * $week bash /bin/AutoUpdate.sh" >> /etc/crontabs/root
+		fi
+		echo "已重启 AutoUpdate 服务."
 	else
-		sed -i '/reboot/d' /etc/crontabs/root >/dev/null 2>&1
+		sed -i '/AutoUpdate/d' /etc/crontabs/root >/dev/null 2>&1
 		/etc/init.d/cron restart
-		echo "已开启 自动更新 服务."
+		echo "已重启 AutoUpdate 服务."
 	fi
 }
 
@@ -36,5 +38,5 @@ start()
 
 stop()
 {
-	echo "已关闭 自动更新 服务."
+	echo "已停止 AutoUpdate 服务."
 }

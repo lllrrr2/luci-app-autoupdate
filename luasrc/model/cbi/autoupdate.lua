@@ -1,12 +1,13 @@
 require("luci.sys")
 
-m=Map("autoupdate",translate("AutoUpdate"),translate("Openwrt-AutoUpdate是一个自动升级AutoBuild固件的脚本"))
+m=Map("autoupdate",translate("AutoUpdate"),translate("Openwrt-AutoUpdate is a script that AutoUpgrade Firmware"))
 
 s=m:section(TypedSection,"login","")
 s.addremove=false
 s.anonymous=true
 
-enable=s:option(Flag,"enable",translate("启用定时更新"))
+enable=s:option(Flag,"enable",translate("Enable AutoUpdate"))
+forceupdate=s:option(Flag,"forceupdate",translate("Force Update"), translate("If no new version is detected,do upgrade also"))
 enable.rmempty = false
 enable.default=0
 
