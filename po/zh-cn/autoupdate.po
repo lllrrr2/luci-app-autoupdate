@@ -1,7 +1,7 @@
 msgid "AutoUpdate"
 msgstr "定时更新"
 
-msgid "Week Day"
+msgid "xWeek Day"
 msgstr "更新时间"
 
 msgid "Everyday"
@@ -10,10 +10,10 @@ msgstr "每天"
 msgid "Day"
 msgstr "天"
 
-msgid "Hour"
+msgid "xHour"
 msgstr "小时 [0~23]"
 
-msgid "Minute"
+msgid "xMinute"
 msgstr "分钟 [0~59]"
 
 msgid "Check Update"
@@ -25,8 +25,15 @@ msgstr "启用定时更新"
 msgid "Force Update"
 msgstr "强制更新"
 
-msgid "If no new version is detected,do upgrade also"
+msgid "Do force upgrade"
 msgstr "即使未检测到新版本,也执行更新"
 
-msgid "Openwrt-AutoUpdate is a script that AutoUpgrade Firmware"
-msgstr "Openwrt-AutoUpdate是一个自动升级AutoBuild固件的脚本"
+msgid "Scheduled Update is a timed run Openwrt-AutoUpdate application"
+msgstr "定时更新是一个定时执行 Openwrt-AutoUpdate 的应用"
+
+msgid "Do Upgrade"
+msgstr "执行升级"
+
+msgid "Update Firmware"
+msgstr "升级固件"
+
