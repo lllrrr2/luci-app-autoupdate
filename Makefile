@@ -5,9 +5,9 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=LuCI Support for Openwrt-AutoUpdate
 LUCI_DEPENDS:=+curl +wget
 LUCI_PKGARCH:=all
-PKG_VERSION:=7
-PKG_RELEASE:=20201106
+PKG_VERSION:=8
+PKG_RELEASE:=20201202
 
 include $(TOPDIR)/feeds/luci/luci.mk
 
-$(eval $(call BuildPackage,luci-app-autoupdate))
+# call BuildPackage - OpenWrt buildroot signature
