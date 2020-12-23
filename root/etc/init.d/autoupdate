@@ -18,7 +18,7 @@ run_autoupdate()
 		sed -i '/AutoUpdate/d' /etc/crontabs/root >/dev/null 2>&1
 		/etc/init.d/cron restart
 		if [ $forceupdate = 1 ];then
-			echo "$minute $hour * * $week bash /bin/AutoUpdate.sh -x" >> /etc/crontabs/root
+			echo "$minute $hour * * $week bash /bin/AutoUpdate.sh -f" >> /etc/crontabs/root
 		else
 			echo "$minute $hour * * $week bash /bin/AutoUpdate.sh" >> /etc/crontabs/root
 		fi
