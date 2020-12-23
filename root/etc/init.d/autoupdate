@@ -20,7 +20,7 @@ run_autoupdate()
 		if [ $forceupdate = 1 ];then
 			echo "$minute $hour * * $week bash /bin/AutoUpdate.sh -f" >> /etc/crontabs/root
 		else
-			echo "$minute $hour * * $week bash /bin/AutoUpdate.sh" >> /etc/crontabs/root
+			echo "$minute $hour * * $week bash /bin/AutoUpdate.sh -u" >> /etc/crontabs/root
 		fi
 		echo "已重启 AutoUpdate 服务."
 	else
