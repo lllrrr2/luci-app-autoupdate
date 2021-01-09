@@ -22,17 +22,14 @@ msgstr "检查更新"
 msgid "Enable AutoUpdate"
 msgstr "启用定时更新"
 
-msgid "Force Update"
-msgstr "强制更新"
-
-msgid "Do force upgrade"
-msgstr "即使未检测到新版本固件,也执行更新"
-
 msgid "Scheduled Update is a timed run Openwrt-AutoUpdate application"
 msgstr "定时更新是一个 定时执行更新固件脚本 的应用"
 
 msgid "Do Upgrade"
 msgstr "执行更新"
 
-msgid "Update Firmware"
-msgstr "更新固件"
+msgid "Upgrade to Nightly Version"
+msgstr "更新到最新每夜版"
+
+msgid "Upgrade to Stable Version"
+msgstr "更新到最新稳定版"

@@ -2,25 +2,28 @@
 # https://github.com/Hyy2001X/AutoBuild-Actions
 # AutoBuild Module by Hyy2001
 
-[ -e /tmp/cloud_version ] && rm -f /tmp/cloud_version
-if [ ! -e /bin/AutoUpdate.sh ];then
-	echo "不受支持的固件" > /tmp/cloud_version
+[ -f /tmp/cloud_version ] && rm -f /tmp/cloud_*_version
+if [ ! -f /bin/AutoUpdate.sh ];then
+	echo "未检测到 /bin/AutoUpdate.sh" > /tmp/cloud_nightly_version
+	echo "未检测到 /bin/AutoUpdate.sh" > /tmp/cloud_stable_version
 	exit
 fi
-Github=$(awk -F '[=]' '/Github/{print $2}' /bin/AutoUpdate.sh | awk 'NR==1')
+CURRENT_DEVICE="$(jsonfilter -e '@.model.id' < "/etc/board.json" | tr ',' '_')"
+Github="$(awk -F '[=]' '/Github/{print $2}' /bin/AutoUpdate.sh | awk 'NR==1')"
 [[ -z "${Github}" ]] && exit
-Author=${Github##*com/}
-Github_Tags=https://api.github.com/repos/${Author}/releases/latest
-GET_Version=$(wget -q ${Github_Tags} -O - | egrep -o 'R[0-9]+.[0-9]+.[0-9]+.[0-9]+' | awk 'END {print}')
+Author="${Github##*com/}"
+Github_Tags="https://api.github.com/repos/${Author}/releases/latest"
+wget -q ${Github_Tags} -O - > /tmp/Github_Tags
+GET_Nightly_Version=$(cat /tmp/Github_Tags | egrep -o "AutoBuild-${CURRENT_DEVICE}-R[0-9]+.[0-9]+.[0-9]+.[0-9]+" | awk 'END {print}' | egrep -o 'R[0-9]+.[0-9]+.[0-9]+.[0-9]+')
+[[ -z "${GET_Nightly_Version}" ]] && echo "未知" > /tmp/cloud_nightly_version && exit
+GET_Stable_Version=$(cat /tmp/Github_Tags | egrep -o "AutoBuild-${CURRENT_DEVICE}-R[0-9]+.[0-9]+.[0-9]+.[0-9]+-Stable" | awk 'END {print}' | egrep -o 'R[0-9]+.[0-9]+.[0-9]+.[0-9]+-Stable')
+[[ -z "${GET_Stable_Version}" ]] && echo "未知" > /tmp/cloud_stable_version && exit
+echo "${GET_Stable_Version}" > /tmp/cloud_stable_version
 CURRENT_Version=$(awk 'NR==1' /etc/openwrt_info)
-if [[ -z "${GET_Version}" ]];then
-	echo "未知" > /tmp/cloud_version
-	exit
+if [[ "${CURRENT_Version}" == "${GET_Nightly_Version}" ]];then
+	Checked_Type="已是最新"
 else
-	if [[ "${CURRENT_Version}" == "${GET_Version}" ]];then
-		echo "${GET_Version} [已是最新]" > /tmp/cloud_version
-	else
-		echo "${GET_Version} [可更新]" > /tmp/cloud_version
-	fi
+	Checked_Type="可更新"
 fi
+echo "${GET_Nightly_Version} [${Checked_Type}]" > /tmp/cloud_nightly_version
 exit

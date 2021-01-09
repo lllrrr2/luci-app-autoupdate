@@ -10,11 +10,7 @@ s=m:section(TypedSection,"login","")
 s.addremove=false
 s.anonymous=true
 
-o = s:option(Flag, "enable", translate("Enable AutoUpdate"),translate("启用后将在指定时间段自动检查并更新固件"))
-o.default = 0
-o.optional = false
-
-o = s:option(Flag, "forceupdate", translate("Force Update"),translate("Do force upgrade"))
+o = s:option(Flag, "enable", translate("Enable AutoUpdate"),translate("Automatically update firmware during the specified time"))
 o.default = 0
 o.optional = false
 
@@ -38,13 +34,21 @@ pass.datatype = "range(0,59)"
 pass.rmempty = false
 
 luci.sys.call ( "/usr/share/autoupdate/Check_Update.sh > /dev/null")
-local cloud_version = luci.sys.exec("cat /tmp/cloud_version")
+local cloud_nightly_version = luci.sys.exec("cat /tmp/cloud_nightly_version")
+local cloud_stable_version = luci.sys.exec("cat /tmp/cloud_stable_version")
 
-button_upgrade_firmware = s:option (Button, "_button_upgrade_firmware", translate("Update Firmware"),
-translatef("点击上方 执行更新 后请耐心等待至路由器重启.") .. "<br><br>设备名称:" ..current_model .. "<br>当前固件版本: " .. current_version .. "<br>云端固件版本: " .. cloud_version)
-button_upgrade_firmware.inputtitle = translate ("Do Upgrade")
-button_upgrade_firmware.write = function()
-	luci.sys.call ("bash /bin/AutoUpdate.sh > /dev/null")
+button_upgrade_nightly_firmware = s:option (Button, "_button_upgrade_nightly_firmware", translate("Upgrade to Nightly Version"),
+translatef("点击上方 执行更新 后请耐心等待至路由器重启.") .. "<br><br>设备名称: " ..current_model .. "<br>当前固件版本: " .. current_version .. "<br>最新每夜版本: " .. cloud_nightly_version)
+button_upgrade_nightly_firmware.inputtitle = translate ("Do Upgrade")
+button_upgrade_nightly_firmware.write = function()
+	luci.sys.call ("bash /bin/AutoUpdate.sh -u > /dev/null")
+end
+
+button_upgrade_stable_firmware = s:option (Button, "_button_upgrade_stable_firmware", translate("Upgrade to Stable Version"),
+translatef("") .. "<br>最新稳定版本: " .. cloud_stable_version)
+button_upgrade_stable_firmware.inputtitle = translate ("Do Upgrade")
+button_upgrade_stable_firmware.write = function()
+	luci.sys.call ("bash /bin/AutoUpdate.sh -s > /dev/null")
 end
 
 local e=luci.http.formvalue("cbi.apply")
