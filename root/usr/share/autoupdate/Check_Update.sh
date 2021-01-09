@@ -2,7 +2,7 @@
 # https://github.com/Hyy2001X/AutoBuild-Actions
 # AutoBuild Module by Hyy2001
 
-[ -f /tmp/cloud_version ] && rm -f /tmp/cloud_*_version
+rm -f /tmp/cloud_*_version
 if [ ! -f /bin/AutoUpdate.sh ];then
 	echo "未检测到 /bin/AutoUpdate.sh" > /tmp/cloud_nightly_version
 	echo "未检测到 /bin/AutoUpdate.sh" > /tmp/cloud_stable_version
