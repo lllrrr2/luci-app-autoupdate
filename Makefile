@@ -2,11 +2,11 @@
 
 include $(TOPDIR)/rules.mk
 
-LUCI_TITLE:=LuCI Support for Openwrt-AutoUpdate
+LUCI_TITLE:=LuCI Support for AutoBuild Firmware/AutoUpdate.sh
 LUCI_DEPENDS:=+curl +wget
 LUCI_PKGARCH:=all
 PKG_VERSION:=1
-PKG_RELEASE:=20201223
+PKG_RELEASE:=20210109
 
 include $(TOPDIR)/feeds/luci/luci.mk
 
