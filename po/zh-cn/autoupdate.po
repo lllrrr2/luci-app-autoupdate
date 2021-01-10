@@ -33,3 +33,6 @@ msgstr "更新到最新每夜版"
 
 msgid "Upgrade to Stable Version"
 msgstr "更新到最新稳定版"
+
+msgid "Automatically update firmware during the specified time"
+msgstr "启用后将在指定时间段自动检查并更新固件"
