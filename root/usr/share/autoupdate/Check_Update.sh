@@ -14,13 +14,12 @@ Github="$(awk 'NR==2' /etc/openwrt_info)"
 Author="${Github##*com/}"
 Github_Tags="https://api.github.com/repos/${Author}/releases/latest"
 wget -q ${Github_Tags} -O - > /tmp/Github_Tags
-GET_Nightly_Version=$(cat /tmp/Github_Tags | egrep -o "AutoBuild-${CURRENT_DEVICE}-R[0-9]+.[0-9]+.[0-9]+.[0-9]+.[a-z]" | awk 'END {print}' | egrep -o 'R[0-9]+.[0-9]+.[0-9]+.[0-9]+')
-[[ -z "${GET_Nightly_Version}" ]] && GET_Nightly_Version="未知"
-GET_Stable_Version=$(cat /tmp/Github_Tags | egrep -o "AutoBuild-${CURRENT_DEVICE}-R[0-9]+.[0-9]+.[0-9]+.[0-9]+-Stable.[a-z]" | awk 'END {print}' | egrep -o 'R[0-9]+.[0-9]+.[0-9]+.[0-9]+-Stable')
+GET_Nightly_Version="$(cat /tmp/Github_Tags | egrep -o "AutoBuild-${CURRENT_DEVICE}-R[0-9]+.[0-9]+.[0-9]+.[0-9]+.[a-z]" | awk 'END {print}' | egrep -o 'R[0-9]+.[0-9]+.[0-9]+.[0-9]+')"
+GET_Stable_Version="$(cat /tmp/Github_Tags | egrep -o "AutoBuild-${CURRENT_DEVICE}-R[0-9]+.[0-9]+.[0-9]+.[0-9]+-Stable.[a-z]" | awk 'END {print}' | egrep -o 'R[0-9]+.[0-9]+.[0-9]+.[0-9]+-Stable')"
 [[ -z "${GET_Stable_Version}" ]] && GET_Stable_Version="未知"
 echo "${GET_Stable_Version}" > /tmp/cloud_stable_version
-CURRENT_Version=$(awk 'NR==1' /etc/openwrt_info)
-if [ ! "${GET_Nightly_Version}" == "未知" ];then
+CURRENT_Version="$(awk 'NR==1' /etc/openwrt_info)"
+if [ ! -z "${GET_Nightly_Version}" ];then
 	if [[ "${CURRENT_Version}" == "${GET_Nightly_Version}" ]];then
 		Checked_Type="已是最新"
 	else
@@ -28,6 +27,6 @@ if [ ! "${GET_Nightly_Version}" == "未知" ];then
 	fi
 	echo "${GET_Nightly_Version} [${Checked_Type}]" > /tmp/cloud_nightly_version
 else
-	echo "${GET_Nightly_Version}" > /tmp/cloud_stable_version
+	echo "未知" > /tmp/cloud_nightly_version
 fi
 exit

@@ -3,6 +3,8 @@ require("luci.util")
 require("io")
 local current_version = luci.sys.exec("cat /etc/openwrt_info | awk 'NR==1'")
 local current_model = luci.sys.exec("jsonfilter -e '@.model.id' < /etc/board.json | tr ',' '_'")
+local github_url = luci.sys.exec("cat /etc/openwrt_info | awk 'NR==2'")
+
 local m, o
 m=Map("autoupdate",translate("AutoUpdate"),translate("Scheduled Update is a timed run Openwrt-AutoUpdate application"))
 
@@ -32,6 +34,9 @@ hour.rmempty = false
 pass=s:option(Value,"minute",translate("xMinute"))
 pass.datatype = "range(0,59)"
 pass.rmempty = false
+
+o=s:option(Value,"github",translate("Github Url"))
+o.default=github_url
 
 luci.sys.call ( "/usr/share/autoupdate/Check_Update.sh > /dev/null")
 local cloud_nightly_version = luci.sys.exec("cat /tmp/cloud_nightly_version")
