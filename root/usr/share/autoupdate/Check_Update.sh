@@ -8,18 +8,32 @@ if [ ! -f /bin/AutoUpdate.sh ];then
 	echo "未检测到 /bin/AutoUpdate.sh" > /tmp/cloud_stable_version
 	exit
 fi
-CURRENT_DEVICE="$(jsonfilter -e '@.model.id' < "/etc/board.json" | tr ',' '_')"
+CURRENT_DEVICE="$(awk 'NR==3' /etc/openwrt_info)"
+[[ -z "${CURRENT_DEVICE}" ]] && CURRENT_DEVICE="$(jsonfilter -e '@.model.id' < "/etc/board.json" | tr ',' '_')"
 Github="$(awk 'NR==2' /etc/openwrt_info)"
 [[ -z "${Github}" ]] && exit
 Author="${Github##*com/}"
 Github_Tags="https://api.github.com/repos/${Author}/releases/latest"
 wget -q ${Github_Tags} -O - > /tmp/Github_Tags
-GET_Nightly_Version="$(cat /tmp/Github_Tags | egrep -o "AutoBuild-${CURRENT_DEVICE}-R[0-9]+.[0-9]+.[0-9]+.[0-9]+.[a-z]" | awk 'END {print}' | egrep -o 'R[0-9]+.[0-9]+.[0-9]+.[0-9]+')"
-GET_Stable_Version="$(cat /tmp/Github_Tags | egrep -o "AutoBuild-${CURRENT_DEVICE}-R[0-9]+.[0-9]+.[0-9]+.[0-9]+-Stable.[a-z]" | awk 'END {print}' | egrep -o 'R[0-9]+.[0-9]+.[0-9]+.[0-9]+-Stable')"
+Firmware_Type="$(awk 'NR==4' /etc/openwrt_info)"
+case ${CURRENT_DEVICE} in
+x86_64)
+	if [ -d /sys/firmware/efi ];then
+		Firmware_SFX="-UEFI.${Firmware_Type}"
+	else
+		Firmware_SFX="-Legacy.${Firmware_Type}"
+	fi
+;;
+*)
+	Firmware_SFX=".${Firmware_Type}"
+;;
+esac
+GET_Nightly_Version="$(cat /tmp/Github_Tags | egrep -o "AutoBuild-${CURRENT_DEVICE}-R[0-9]+.[0-9]+.[0-9]+.[0-9]+${Firmware_SFX}" | awk 'END {print}' | egrep -o 'R[0-9]+.[0-9]+.[0-9]+.[0-9]+')"
+GET_Stable_Version="$(cat /tmp/Github_Tags | egrep -o "AutoBuild-${CURRENT_DEVICE}-R[0-9]+.[0-9]+.[0-9]+.[0-9]+-Stable+${Firmware_SFX}" | awk 'END {print}' | egrep -o 'R[0-9]+.[0-9]+.[0-9]+.[0-9]+-Stable')"
 [[ -z "${GET_Stable_Version}" ]] && GET_Stable_Version="未知"
 echo "${GET_Stable_Version}" > /tmp/cloud_stable_version
 CURRENT_Version="$(awk 'NR==1' /etc/openwrt_info)"
-if [ ! -z "${GET_Nightly_Version}" ];then
+if [[ ! -z "${GET_Nightly_Version}" ]];then
 	if [[ "${CURRENT_Version}" == "${GET_Nightly_Version}" ]];then
 		Checked_Type="已是最新"
 	else
