@@ -20,12 +20,15 @@ case ${CURRENT_DEVICE} in
 x86_64)
 	if [ -d /sys/firmware/efi ];then
 		Firmware_SFX="-UEFI.${Firmware_Type}"
+		BOOT_Type="-UEFI"
 	else
 		Firmware_SFX="-Legacy.${Firmware_Type}"
+		BOOT_Type="-Legacy"
 	fi
 ;;
 *)
 	Firmware_SFX=".${Firmware_Type}"
+	BOOT_Type=""
 ;;
 esac
 GET_Nightly_Version="$(cat /tmp/Github_Tags | egrep -o "AutoBuild-${CURRENT_DEVICE}-R[0-9]+.[0-9]+.[0-9]+.[0-9]+${Firmware_SFX}" | awk 'END {print}' | egrep -o 'R[0-9]+.[0-9]+.[0-9]+.[0-9]+')"
@@ -39,7 +42,7 @@ if [[ ! -z "${GET_Nightly_Version}" ]];then
 	else
 		Checked_Type="可更新"
 	fi
-	echo "${GET_Nightly_Version} [${Checked_Type}]" > /tmp/cloud_nightly_version
+	echo "${GET_Nightly_Version}${BOOT_Type} [${Checked_Type}]" > /tmp/cloud_nightly_version
 else
 	echo "未知" > /tmp/cloud_nightly_version
 fi
