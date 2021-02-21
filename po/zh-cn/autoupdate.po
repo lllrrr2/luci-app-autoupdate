@@ -28,11 +28,8 @@ msgstr "定时更新是一个 定时执行更新固件脚本 的应用"
 msgid "Do Upgrade"
 msgstr "执行更新"
 
-msgid "Upgrade to Nightly Version"
-msgstr "更新到最新每夜版"
-
-msgid "Upgrade to Stable Version"
-msgstr "更新到最新稳定版"
+msgid "Upgrade to Latested Version"
+msgstr "更新固件"
 
 msgid "Automatically update firmware during the specified time"
 msgstr "启用后将在指定时间段自动检查并更新固件"
