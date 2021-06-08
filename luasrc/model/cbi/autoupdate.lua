@@ -36,7 +36,7 @@ local github_url = luci.sys.exec("bash /bin/AutoUpdate.sh --var Github")
 o=s:option(Value,"github",translate("Github Url"))
 o.default=github_url
 
-luci.sys.call ( "/usr/share/autoupdate/Check_Update.sh /tmp > /dev/null")
+luci.sys.call ( "/usr/share/autoupdate/Check_Update.sh > /dev/null")
 local cloud_version = luci.sys.exec("cat /tmp/Cloud_Version")
 local current_version = luci.sys.exec("bash /bin/AutoUpdate.sh --var CURRENT_Version")
 local current_model = luci.sys.exec("bash /bin/AutoUpdate.sh --var DEFAULT_Device")
